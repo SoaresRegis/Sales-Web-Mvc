@@ -9,13 +9,18 @@ using System.Threading.Tasks;
 
 namespace SalesWebMvc.Controllers {
     public class HomeController : Controller {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger) {
-            _logger = logger;
+       public IActionResult Index() {
+            return View();
         }
 
-        public IActionResult Index() {
+        public IActionResult About() {
+            ViewData["Message"] = "Sales Web MVC App from C#";
+            ViewData["Director"] = "Regis Soares";
+            return View();
+        }
+           
+        public IActionResult Contact() {
+            ViewData["Message"] = "Your contact page.";
             return View();
         }
 
