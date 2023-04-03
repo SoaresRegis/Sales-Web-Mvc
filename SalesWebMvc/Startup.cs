@@ -1,15 +1,20 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Globalization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using SalesWebMvc.Models;
 using SalesWebMvc.Data;
+using Microsoft.Extensions.Hosting;
 
 namespace SalesWebMvc {
     public class Startup {
@@ -27,12 +32,17 @@ namespace SalesWebMvc {
             options.UseMySql(Configuration.GetConnectionString("SalesWebMvcContext"), builder =>
                 builder.MigrationsAssembly("SalesWebMvc")));
 
+            services.AddScoped<SeedingService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
-            if (env.IsDevelopment()) {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, SeedingService seedingService)
+        {
+            if (env.IsDevelopment()) 
+            {
                 app.UseDeveloperExceptionPage();
+                seedingService.Seed();
             }
             else {
                 app.UseExceptionHandler("/Home/Error");
